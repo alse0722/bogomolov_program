@@ -132,7 +132,9 @@ def cycles_process():
 
 def main():
     # генерация случайного графа
-    #graph_generator.gen(filename, 6)
+    print ('Введите количество вершин: ')
+    points = input()
+    graph_generator.gen(filename, points)
 
     # поиск контуров
     cycles_process()

@@ -25,7 +25,7 @@ def generate_random_graph(n):
             count += 1
 
     print('Было сгенерировано', count, 'дуг')
-    return graph
+    return [graph, count]
 
 def save_graph_to_file(graph, filename):
     with open(filename, 'w') as file:
@@ -39,6 +39,8 @@ def gen(filename, n):
 
     random_graph = generate_random_graph(n)
 
-    save_graph_to_file(random_graph, filename)
+    save_graph_to_file(random_graph[0], filename)
 
     print(f"Сгенерированный граф с {n} вершинами сохранен в файл '{filename}'")
+
+    return random_graph[1]

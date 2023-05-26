@@ -2,6 +2,8 @@
 import graph_generator
 import graph_demo
 import tkinter as tk
+from tkinter import messagebox
+import os
 
 filename = 'graph.txt'
 output_filename = 'cycles.txt'
@@ -129,17 +131,121 @@ def cycles_process():
 
     save_to_file(final_result, output_filename)
     print(f"Все контуры графа найдены и сохранены в файл '{output_filename}'")
+    return len(final_result)
+
+def generator():
+    top = tk.Toplevel()
+    top.title('Генерация случайного графа')
+    top.geometry('400x190')
+
+    label = tk.Label(top, text='Введите количество вершин графа')
+    label.pack()
+
+    entry = tk.Entry(top)
+    entry.pack()
+
+    def generate_graph():
+        try:
+
+            os.remove(filename)
+            os.remove(output_filename)
+
+            num_vertices = int(entry.get())
+            branches = graph_generator.gen(filename,num_vertices)
+            #cycles = cycles_process()
+            top.destroy()
+            message = f'Новый граф сохранен в graph.txt\nОбщее количество вершин: {num_vertices}\nОбщее количество дуг: {branches}'
+            messagebox.showinfo('Генерация случайного графа', message)
+            #graph_demo.demo(filename)
+
+        except ValueError:
+            messagebox.showerror('Ошибка', 'Введите корректное количество вершин!')
+
+    button = tk.Button(top, text='Подтвердить', command=generate_graph)
+    button.pack()
+
+def cycler():
+    try:
+        cycles = cycles_process()
+        
+        message = f'Количество найденных контуров: {cycles}\nКонтуры сохранены в файле cycles.txt'
+        messagebox.showinfo('Исследование заданного графа', message)
+        #graph_demo.demo(filename)
+        
+    except FileNotFoundError:
+        messagebox.showerror('Ошибка', 'Файл graph.txt не найден!')
+
+def graph_demonstator():
+    try:
+        graph_demo.demo(filename)
+        
+    except FileNotFoundError:
+        messagebox.showerror('Ошибка', 'Файл graph.txt не найден!')
+
+def matix_demonstator():
+
+    try:
+        with open(filename, "r") as file:
+            content = file.read()
+
+        window = tk.Toplevel()
+        window.title("Матрица графа")
+        window.geometry("400x300")
+
+        text_area = tk.Text(window)
+        text_area.insert(tk.END, content)
+        text_area.pack(fill=tk.BOTH, expand=True)
+
+        window.mainloop()
+        
+    except FileNotFoundError:
+        messagebox.showerror('Ошибка', f'Файл {filename} не найден!')
+
+
+def contours_demonstator():
+
+    try:
+        with open(output_filename, "r") as file:
+            content = file.read()
+
+        window = tk.Toplevel()
+        window.title("Контуры графа")
+        window.geometry("400x300")
+
+        text_area = tk.Text(window)
+        text_area.insert(tk.END, content)
+        text_area.pack(fill=tk.BOTH, expand=True)
+
+        window.mainloop()
+        
+    except FileNotFoundError:
+        messagebox.showerror('Ошибка', f'Файл {output_filename} не найден!')
+
 
 def main():
-    # генерация случайного графа
-    print ('Введите количество вершин: ')
-    points = input()
-    graph_generator.gen(filename, int(points))
+    root = tk.Tk()
+    root.title('Приветствие')
+    root.geometry('400x190')
 
-    # поиск контуров
-    cycles_process()
+    label = tk.Label(root, text='Вас приветствует программа поиска контуров графа!')
+    label.pack()
 
-    # вывод графика
-    graph_demo.demo(filename)
+    show_button = tk.Button(root, text='Показать заданный граф', width=100, command=graph_demonstator)
+    show_button.pack()
 
-main()
+    generate_button = tk.Button(root, text='Сгенерировать случайный граф', width=100, command=generator)
+    generate_button.pack()
+
+    read_button = tk.Button(root, text='Исследовать заданный граф', width=100, command=cycler)
+    read_button.pack()
+
+    show_matrix_button = tk.Button(root, text='Показать матрицу графа', width=100, command=matix_demonstator)
+    show_matrix_button.pack()
+
+    show_contour_button = tk.Button(root, text='Показать контуры графа', width=100, command=contours_demonstator)
+    show_contour_button.pack()
+
+    root.mainloop()
+
+if __name__ == '__main__':
+    main()

@@ -1,6 +1,7 @@
 
 import graph_generator
 import graph_demo
+import tkinter as tk
 
 filename = 'graph.txt'
 output_filename = 'cycles.txt'
@@ -75,7 +76,6 @@ def save_to_file(array, filename):
 
     def reverse_array_to_string(arr):
         arr.append(arr[0])
-        print(arr)
         fixed_arr = []
         for point in arr:
             fixed_arr.append(point + 1)
@@ -134,7 +134,7 @@ def main():
     # генерация случайного графа
     print ('Введите количество вершин: ')
     points = input()
-    graph_generator.gen(filename, points)
+    graph_generator.gen(filename, int(points))
 
     # поиск контуров
     cycles_process()

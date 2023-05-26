@@ -12,7 +12,7 @@ def draw_graph(graph):
             elif graph[i][j] == '-':
                 G.add_edge(j+1, i+1, sign='-')
 
-    pos = nx.spring_layout(G)  # Расположение вершин графа
+    pos = nx.spring_layout(G, k=0.2)  # Расположение вершин графа с параметром k=0.2
 
     # Рисование вершин
     nx.draw_networkx_nodes(G, pos, node_color='lightblue', node_size=300)
@@ -49,7 +49,5 @@ def read_graph(filename):
         return graph
 
 def demo(filename):
-    #graph = read_graph('graph.txt')
-
     graph = read_graph(filename)
     draw_graph(graph)
